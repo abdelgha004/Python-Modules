@@ -1,4 +1,4 @@
-#!/usr/bin/env python3gs
+#!/usr/bin/env python3
 
 
 def check_temperature(temp_str):
@@ -15,7 +15,7 @@ def check_temperature(temp_str):
 
     try:
         number = int(temp_str)
-    except ValueError:
+    except:
         return f"Error: '{temp_str}' is not a valid number"
 
     if 0 <= number <= 40:
