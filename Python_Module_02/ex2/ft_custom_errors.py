@@ -25,8 +25,7 @@ def test_water_problem():
     raise WaterError("Not enough water in the tank!")
 
 
-if __name__ == "__main__":
-    print("=== Custom Garden Errors Demo ===")
+def test_garden_error():
     try:
         print("\nTesting PlantError...")
         test_plant_problem()
@@ -40,10 +39,14 @@ if __name__ == "__main__":
         print(f"Caught WaterError: {err}")
 
     print("\nTesting catching all garden errors...")
-    for func in [test_plant_problem, test_water_problem]:
+    for func in (test_plant_problem, test_water_problem):
         try:
             func()
         except GardenError as err:
             print(f"Caught a garden error: {err}")
 
+
+if __name__ == "__main__":
+    print("=== Custom Garden Errors Demo ===")
+    test_garden_error()
     print("\nAll custom error types work correctly!")
