@@ -1,20 +1,36 @@
+#!/usr/bin/env python3
+
 import sys
 import math
 
-print("=== Game Coordinate System ===")
+print("=== Game Coordinate System ===\n")
+position = (10, 20, 5)
+start = (0, 0, 0)
 
-# $> python3 ft_coordinate_system.py
-# Position created: (10, 20, 5)
-# Distance between (0, 0, 0) and (10, 20, 5): 22.91
+x1, y1, z1 = start
+x2, y2, z2 = position
 
-# Parsing coordinates: "3,4,0"
-# Parsed position: (3, 4, 0)
-# Distance between (0, 0, 0) and (3, 4, 0): 5.0
+distances = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
 
-# Parsing invalid coordinates: "abc,def,ghi"
-# Error parsing coordinates: invalid literal for int() with base 10: 'abc'
-# Error details - Type: ValueError, Args: ("invalid literal for int() with base 10: 'abc'",)
+print(f"Position created: {position}")
+print(f"Distance between {start} and {position}: {distances:.2f}\n")
 
-# Unpacking demonstration:
-# Player at x=3, y=4, z=0
-# Coordinates: X=3, Y=4, Z=0
+for i in range(1, len(sys.argv)):
+    try:
+        position = tuple(int(n) for n in sys.argv[i].split(","))
+        print(f"Parsing coordinates: \"{sys.argv[i]}\"")
+
+        x2, y2, z2 = position
+        print(f"Position position: {position}")
+
+        distances = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+        print(f"Distance between {start} and {position}: {distances:.1f}\n")
+
+    except ValueError as err:
+        print(f"Parsing invalid coordinates: \"{sys.argv[i]}\"")
+        print(f"Error parsing coordinates: {err}")
+        print(f"Error details - Type: {type(err).__name__}, Args: (\"{err}\",)\n")
+
+print("Unpacking demonstration:")
+print(f"Player at x={x2}, y={y2}, z={z2}")
+print(f"Coordinates: X={x2}, Y={y2}, Z={z2}")
