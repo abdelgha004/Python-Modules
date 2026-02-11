@@ -29,7 +29,8 @@ for i in range(1, len(sys.argv)):
     except ValueError as err:
         print(f"Parsing invalid coordinates: \"{sys.argv[i]}\"")
         print(f"Error parsing coordinates: {err}")
-        print(f"Error details - Type: {type(err).__name__}, Args: (\"{err}\",)\n")
+        print("Error details - Type: "
+              f"{type(err).__name__}, Args: (\"{err}\",)\n")
 
 print("Unpacking demonstration:")
 print(f"Player at x={x2}, y={y2}, z={z2}")

@@ -12,7 +12,7 @@ if size > 1:
         except ValueError:
             print(f"oops, I typed '{sys.argv[i]}' instead of '1000'")
     size = len(numbers)
-    if(size > 0):
+    if size > 0:
         print(f"Scores processed: {numbers}")
         print(f"Total players: {size}")
         print(f"Total score: {sum(numbers)}")
@@ -21,4 +21,5 @@ if size > 1:
         print(f"Low score: {min(numbers)}")
         print(f"Score range: {max(numbers) - min(numbers)}")
 else:
-    print("No scores provided. Usage: python3 ft_score_analytics.py <score1> <score2> ...")
+    print("No scores provided. Usage: python3"
+          " ft_score_analytics.py <score1> <score2> ...")
