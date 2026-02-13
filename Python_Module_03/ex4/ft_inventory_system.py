@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 players_inventory = {
     "alice": {"sword": 1, "potion": 5, "shield": 1},
     "bob": {"magic_ring": 1, "potion": 0}
@@ -14,6 +12,7 @@ item_catalog = {
 
 print("=== Player Inventory System ===\n")
 print("=== Alice's Inventory ===")
+
 inventory_value = 0
 item_count = 0
 weapon = 0
@@ -25,12 +24,14 @@ for item, qty in players_inventory["alice"].items():
     total = qty * info["value"]
     inventory_value += total
     item_count += qty
+
     if info["type"] == "weapon":
         weapon += qty
     elif info["type"] == "consumable":
         consumable += qty
     elif info["type"] == "armor":
         armor += qty
+
     print(f"{item} ({info['type']}, {info['rarity']}): "
           f"{qty}x @ {info['value']} gold each = {total} gold")
 
@@ -41,10 +42,12 @@ print(f"Categories: weapon({weapon}),"
       f" consumable({consumable}), armor({armor})")
 
 print("\n=== Transaction: Alice gives Bob 2 potions ===")
+
 if players_inventory["alice"]["potion"] >= 2:
     players_inventory["alice"]["potion"] -= 2
-    bob_potion = players_inventory["bob"].get("potion", 0)
-    players_inventory["bob"].update({"potion": bob_potion + 2})
+    players_inventory["bob"]["potion"] = (
+        players_inventory["bob"].get("potion", 0) + 2
+    )
     print("Transaction successful!")
 else:
     print("Transaction failed!")
@@ -59,7 +62,7 @@ most_value_player = ""
 most_items_player = ""
 max_value = 0
 max_items = 0
-rare_items = []
+rare_items = set()
 for player, inv in players_inventory.items():
     total_value = 0
     total_items = 0
@@ -70,8 +73,9 @@ for player, inv in players_inventory.items():
             total_value += qty * info["value"]
             total_items += qty
 
-            if info["rarity"] == "rare" or info["rarity"] == "legendary":
-                rare_items.append(item)
+            if info["rarity"] in ("rare", "legendary"):
+                rare_items.add(item)
+
     if total_value > max_value:
         max_value = total_value
         most_value_player = player
@@ -79,6 +83,7 @@ for player, inv in players_inventory.items():
     if total_items > max_items:
         max_items = total_items
         most_items_player = player
+
 print(f"Most valuable player: "
       f"{most_value_player.capitalize()} ({max_value} gold)")
 print(f"Most items: {most_items_player.capitalize()} ({max_items} items)")

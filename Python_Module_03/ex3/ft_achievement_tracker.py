@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 alice = {'first_kill', 'level_10', 'treasure_hunter', 'speed_demon'}
 bob = {'first_kill', 'level_10', 'boss_slayer', 'collector'}
 charlie = {'level_10', 'treasure_hunter',

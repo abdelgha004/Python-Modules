@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-import sys
 import math
 
 print("=== Game Coordinate System ===\n")
@@ -10,24 +7,29 @@ start = (0, 0, 0)
 x1, y1, z1 = start
 x2, y2, z2 = position
 
-distances = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
 
 print(f"Position created: {position}")
-print(f"Distance between {start} and {position}: {distances:.2f}\n")
+print(f"Distance between {start} and {position}: {distance:.2f}\n")
 
-for i in range(1, len(sys.argv)):
+coordinate_strings = ["3,4,0", "abc,def,ghi"]
+
+for coord_str in coordinate_strings:
     try:
-        position = tuple(int(n) for n in sys.argv[i].split(","))
-        print(f"Parsing coordinates: \"{sys.argv[i]}\"")
+        numbers = []
+        for n in coord_str.split(","):
+            numbers.append(int(n))
+        position = tuple(numbers)
+        print(f"Parsing coordinates: \"{coord_str}\"")
 
         x2, y2, z2 = position
-        print(f"Position position: {position}")
+        print(f"Parsed position: {position}")
 
-        distances = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
-        print(f"Distance between {start} and {position}: {distances:.1f}\n")
+        distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+        print(f"Distance between {start} and {position}: {distance:.1f}\n")
 
     except ValueError as err:
-        print(f"Parsing invalid coordinates: \"{sys.argv[i]}\"")
+        print(f"Parsing invalid coordinates: \"{coord_str}\"")
         print(f"Error parsing coordinates: {err}")
         print("Error details - Type: "
               f"{type(err).__name__}, Args: (\"{err}\",)\n")
