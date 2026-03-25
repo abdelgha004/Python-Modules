@@ -1,10 +1,12 @@
-from typing import Any, Tuple
+from typing import Any, List, Dict, Union, Optional
 from abc import ABC, abstractmethod
 
 
 class DataProcessor(ABC):
     """Abstract base class for all data processors."""
-
+    def __init__(self) -> None:
+        super().__init__()
+    
     @abstractmethod
     def process(self, data: Any) -> str:
         """Process data and return a formatted result string."""
@@ -24,18 +26,27 @@ class NumericProcessor(DataProcessor):
     """Processor for numeric lists."""
 
     def validate(self, data: Any) -> bool:
-        return (
-            isinstance(data, list)
-            and all(isinstance(x, (int, float)) for x in data)
-        )
+        """Return True if data is a list of numbers."""
+        if isinstance(data, (int, float)):
+            return True
+        elif (isinstance(data, list)
+              and all(isinstance(x, (int, float)) for x in data)
+              and len(data) > 0):
+            return True
+        return False
 
     def process(self, data: Any) -> str:
+        """Compute count, sum, and average of numeric data."""
+
         if not self.validate(data):
             raise ValueError("Invalid numeric data")
-
-        total = sum(data)
-        count = len(data)
-        avg = total / count if count else 0
+        if isinstance(data, (int, float)):
+            numbers = [data]
+        else:
+            numbers: List[Union[int, float]] = data
+        total = sum(numbers)
+        count = len(numbers)
+        avg = total / count
 
         return f"Processed {count} numeric values, sum={total}, avg={avg}"
 
@@ -44,14 +55,17 @@ class TextProcessor(DataProcessor):
     """Processor for text strings."""
 
     def validate(self, data: Any) -> bool:
-        return isinstance(data, str)
+        """Return True if data is a string."""
+        return isinstance(data, str) and len(data.strip()) > 0
 
     def process(self, data: Any) -> str:
+        """Count characters and words in text."""
+        
         if not self.validate(data):
             raise ValueError("Invalid text data")
-
-        char_count = len(data)
-        word_count = len(data.split())
+        text: str = data
+        char_count = len(text)
+        word_count = len(text.split())
 
         return f"Processed text: {char_count} characters, {word_count} words"
 
@@ -60,14 +74,17 @@ class LogProcessor(DataProcessor):
     """Processor for log entries."""
 
     def validate(self, data: Any) -> bool:
-        return isinstance(data, str)
+        """Return True if data is a string."""
+        return isinstance(data, str) and ": " in data
 
     def process(self, data: Any) -> str:
+        """Extract log level and message, then format output."""
         if not self.validate(data):
             raise ValueError("Invalid log data")
-
-        level, message = data.split(": ", 1)
-        level = level.strip()
+        log: str = data
+        level, message = log.split(": ", 1)
+        
+        level = level.strip().upper()
         message = message.strip()
 
         if level == "ERROR":
@@ -79,54 +96,48 @@ class LogProcessor(DataProcessor):
 
         return f"{prefix} {level} level detected: {message}"
 
+def process_data(processor: DataProcessor, data: Any) -> None:
+    """Helper function to process data with a given processor."""
+    try:
+        print(f"Processing data: {data}")
+        if not processor.validate(data):
+            raise ValueError("Data validation failed")
+        
+        if isinstance(processor, NumericProcessor):
+            print(f"Validation: Numeric data verified")
+        elif isinstance(processor, TextProcessor):
+            print(f"Validation: Text data verified")
+        elif isinstance(processor, LogProcessor):
+            print(f"Validation: Log entry verified")
+
+        result = processor.process(data)
+        print(processor.format_output(result))
+    except Exception as e:
+        print(f"Error: {e}")
 
 def main() -> None:
     """Run processor demos and polymorphic example."""
-
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
+    
     print("\nInitializing Numeric Processor...")
-
-    num = NumericProcessor()
     numeric_data = [1, 2, 3, 4, 5]
-    try:
-        print(f"Processing data: {numeric_data}")
-        if num.validate(numeric_data):
-            print("Validation: Numeric data verified")
-            result = num.process(numeric_data)
-            print(num.format_output(result))
-    except Exception as e:
-        print(f"Error: {e}")
-
+    process_data(NumericProcessor(), numeric_data)
+    
     print("\nInitializing Text Processor...")
-    text = TextProcessor()
     text_data = "Hello Nexus World"
-    try:
-        print(f"Processing data: \"{text_data}\"")
-        if text.validate(text_data):
-            print("Validation: Text data verified")
-            result = text.process(text_data)
-            print(text.format_output(result))
-    except Exception as e:
-        print(f"Error: {e}")
-
+    process_data(TextProcessor(), text_data)
+    
     print("\nInitializing Log Processor...")
-    log = LogProcessor()
     log_data = "ERROR: Connection timeout"
-    try:
-        print(f"Processing data: \"{log_data}\"")
-        if log.validate(log_data):
-            print("Validation: Log entry verified")
-            result = log.process(log_data)
-            print(log.format_output(result))
-    except Exception as e:
-        print(f"Error: {e}")
+    process_data(LogProcessor(), log_data)
+
 
     print("\n=== Polymorphic Processing Demo ===")
     print("\nProcessing multiple data types through same interface...")
 
     processing_tasks = [
         (NumericProcessor(), [1, 2, 3]),
-        (TextProcessor(), "testing codes"),
+        (TextProcessor(), "testing code"),
         (LogProcessor(), "INFO: System ready")
     ]
 
@@ -135,7 +146,7 @@ def main() -> None:
             result = processor.process(input_data)
             print(f"Result {index}: {result}")
         except Exception as e:
-            print(f"Result {index}: Error - {e}")
+            print(f"Result {index}: Error: {e}")
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
