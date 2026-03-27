@@ -6,7 +6,7 @@ class DataProcessor(ABC):
     """Abstract base class for all data processors."""
     def __init__(self) -> None:
         super().__init__()
-    
+
     @abstractmethod
     def process(self, data: Any) -> str:
         """Process data and return a formatted result string."""
@@ -40,10 +40,12 @@ class NumericProcessor(DataProcessor):
 
         if not self.validate(data):
             raise ValueError("Invalid numeric data")
+        numbers: List[Union[int, float]] = data
         if isinstance(data, (int, float)):
             numbers = [data]
         else:
-            numbers: List[Union[int, float]] = data
+            numbers = data
+
         total = sum(numbers)
         count = len(numbers)
         avg = total / count
@@ -60,7 +62,7 @@ class TextProcessor(DataProcessor):
 
     def process(self, data: Any) -> str:
         """Count characters and words in text."""
-        
+
         if not self.validate(data):
             raise ValueError("Invalid text data")
         text: str = data
@@ -83,18 +85,19 @@ class LogProcessor(DataProcessor):
             raise ValueError("Invalid log data")
         log: str = data
         level, message = log.split(": ", 1)
-        
+
         level = level.strip().upper()
         message = message.strip()
 
-        if level == "ERROR":
-            prefix = "[ALERT]"
-        elif level == "INFO":
-            prefix = "[INFO]"
-        else:
-            prefix = "[UNKNOWN]"
+        level_map: Dict[str, str] = {
+            "ERROR": "[ALERT]",
+            "INFO": "[INFO]",
+            "WARNING": "[WARN]"
+            }
+        prefix = level_map.get(level, "[UNKNOWN]")
 
         return f"{prefix} {level} level detected: {message}"
+
 
 def process_data(processor: DataProcessor, data: Any) -> None:
     """Helper function to process data with a given processor."""
@@ -102,35 +105,36 @@ def process_data(processor: DataProcessor, data: Any) -> None:
         print(f"Processing data: {data}")
         if not processor.validate(data):
             raise ValueError("Data validation failed")
-        
-        if isinstance(processor, NumericProcessor):
-            print(f"Validation: Numeric data verified")
-        elif isinstance(processor, TextProcessor):
-            print(f"Validation: Text data verified")
-        elif isinstance(processor, LogProcessor):
-            print(f"Validation: Log entry verified")
 
+        if isinstance(processor, NumericProcessor):
+            print("Validation: Numeric data verified")
+        elif isinstance(processor, TextProcessor):
+            print("Validation: Text data verified")
+        elif isinstance(processor, LogProcessor):
+            print("Validation: Log entry verified")
+
+        result: Optional[str] = None
         result = processor.process(data)
         print(processor.format_output(result))
     except Exception as e:
         print(f"Error: {e}")
 
+
 def main() -> None:
     """Run processor demos and polymorphic example."""
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
-    
+
     print("\nInitializing Numeric Processor...")
     numeric_data = [1, 2, 3, 4, 5]
     process_data(NumericProcessor(), numeric_data)
-    
+
     print("\nInitializing Text Processor...")
     text_data = "Hello Nexus World"
     process_data(TextProcessor(), text_data)
-    
+
     print("\nInitializing Log Processor...")
     log_data = "ERROR: Connection timeout"
     process_data(LogProcessor(), log_data)
-
 
     print("\n=== Polymorphic Processing Demo ===")
     print("\nProcessing multiple data types through same interface...")
