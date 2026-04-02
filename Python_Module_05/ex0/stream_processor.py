@@ -37,9 +37,9 @@ class NumericProcessor(DataProcessor):
 
     def process(self, data: Any) -> str:
         """Compute count, sum, and average of numeric data."""
-
         if not self.validate(data):
             raise ValueError("Invalid numeric data")
+
         numbers: List[Union[int, float]] = data
         if isinstance(data, (int, float)):
             numbers = [data]
@@ -83,9 +83,9 @@ class LogProcessor(DataProcessor):
         """Extract log level and message, then format output."""
         if not self.validate(data):
             raise ValueError("Invalid log data")
+
         log: str = data
         level, message = log.split(": ", 1)
-
         level = level.strip().upper()
         message = message.strip()
 
@@ -125,16 +125,13 @@ def main() -> None:
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===")
 
     print("\nInitializing Numeric Processor...")
-    numeric_data = [1, 2, 3, 4, 5]
-    process_data(NumericProcessor(), numeric_data)
+    process_data(NumericProcessor(), [1, 2, 3, 4, 5])
 
     print("\nInitializing Text Processor...")
-    text_data = "Hello Nexus World"
-    process_data(TextProcessor(), text_data)
+    process_data(TextProcessor(), "Hello Nexus World")
 
     print("\nInitializing Log Processor...")
-    log_data = "ERROR: Connection timeout"
-    process_data(LogProcessor(), log_data)
+    process_data(LogProcessor(), "ERROR: Connection timeout")
 
     print("\n=== Polymorphic Processing Demo ===")
     print("\nProcessing multiple data types through same interface...")
@@ -151,6 +148,7 @@ def main() -> None:
             print(f"Result {index}: {result}")
         except Exception as e:
             print(f"Result {index}: Error: {e}")
+
     print("\nFoundation systems online. Nexus ready for advanced streams.")
 
 
