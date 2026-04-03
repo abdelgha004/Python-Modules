@@ -10,8 +10,8 @@ print(f"stone_to_gem(): {stone_to_gem()}")
 print("\nTesting Relative Imports (from advanced.py):")
 print(f"philosophers_stone(): {philosophers_stone()}")
 print(f"elixir_of_life(): {elixir_of_life()}")
-print("\nTesting Package Access:")
 
+print("\nTesting Package Access:")
 print(f"alchemy.transmutation.lead_to_gold(): {alchemy.transmutation.lead_to_gold()}")
 print(f"alchemy.transmutation.philosophers_stone(): {alchemy.transmutation.philosophers_stone()}")
 
