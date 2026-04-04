@@ -1,4 +1,4 @@
-import alchemy
+import alchemy.transmutation
 from alchemy.transmutation import lead_to_gold, stone_to_gem, elixir_of_life, philosophers_stone
 
 
