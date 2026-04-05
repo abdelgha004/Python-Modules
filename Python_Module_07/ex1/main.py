@@ -27,7 +27,8 @@ def main():
         card = deck.draw_card()
         card_info = card.get_card_info()
         print(f"\nDrew: {card_info['name']} ({card_info['type']})")
-        print(f"Play result: {card.play(card_info)}")
+        game_state = {"available_mana": 6}
+        print(f"Play result: {card.play(game_state)}")
 
     print(
         "\nPolymorphism in action: Same interface,"
