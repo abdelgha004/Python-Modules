@@ -1,6 +1,6 @@
 import sys
 import importlib
-    
+
 
 def check_dependencies():
     required = ["pandas", "numpy", "matplotlib"]
@@ -51,7 +51,6 @@ def main():
     data = pd.DataFrame({"matrix_code": np.random.randn(1000)})
 
     print("Generating visualization...")
-
 
     plt.plot(data["matrix_code"])
     plt.savefig("matrix_analysis.png")
