@@ -1,10 +1,12 @@
 import sys
 import importlib
+from typing import Dict
+from types import ModuleType
 
 
-def check_dependencies():
+def check_dependencies() -> Dict[str, ModuleType]:
     required = ["pandas", "numpy", "matplotlib"]
-    modules = {}
+    modules: Dict[str, ModuleType] = {}
 
     print("\nLOADING STATUS: Loading programs...")
     print("\nChecking dependencies:")
@@ -38,7 +40,7 @@ def check_dependencies():
     return modules
 
 
-def main():
+def main() -> None:
     modules = check_dependencies()
 
     pd = modules["pandas"]

@@ -1,9 +1,9 @@
 import os
 import sys
 from dotenv import load_dotenv
+from typing import Dict, Optional
 
-
-def load_config():
+def load_config() -> Dict[str, Optional[str]]:
     load_dotenv()
 
     return {
@@ -15,7 +15,7 @@ def load_config():
     }
 
 
-def validate_config(config):
+def validate_config(config: Dict[str, Optional[str]]) -> None:
     required = ["mode", "db", "api", "log", "zion"]
     missing = [k for k in required if not config.get(k)]
 
@@ -31,7 +31,7 @@ def validate_config(config):
         sys.exit(1)
 
 
-def display_config(config):
+def display_config(config: Dict[str, Optional[str]]) -> None:
     print("\nORACLE STATUS: Reading the Matrix...\n")
     print("Configuration loaded:")
 
@@ -47,7 +47,7 @@ def display_config(config):
     print("Zion Network: Online")
 
 
-def security_check(config):
+def security_check() -> None:
     print("\nEnvironment security check:")
 
     print("[OK] No hardcoded secrets detected")
@@ -60,11 +60,11 @@ def security_check(config):
     print("[OK] Production overrides available")
 
 
-def main():
+def main() -> None:
     config = load_config()
     validate_config(config)
     display_config(config)
-    security_check(config)
+    security_check()
 
     print("\nThe Oracle sees all configurations.")
 
