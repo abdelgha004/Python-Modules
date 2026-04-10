@@ -1,59 +1,59 @@
 import sys
 import importlib
-
+    
 
 def check_dependencies():
-    required_packages = ["pandas", "numpy", "requests", "matplotlib"]
-    imported_modules = {}
+    required = ["pandas", "numpy", "matplotlib"]
+    modules = {}
+
     print("\nLOADING STATUS: Loading programs...")
     print("\nChecking dependencies:")
-    for package in required_packages:
+
+    for package in required:
         try:
             module = importlib.import_module(package)
-            imported_modules[package] = module
+            modules[package] = module
 
-            if package == "pandas":
-                print(f"[OK] {package} ({module.__version__}) - Data manipulation ready")
-            elif package == "numpy":
-                print(f"[OK] {package} ({module.__version__}) - Numerical computation ready")
-            elif package == "requests":
-                print(f"[OK] {package} ({module.__version__}) - Network access ready")
-            elif package == "matplotlib":
-                print(f"[OK] {package} ({module.__version__}) - Visualization ready")
+            msg = {
+                "pandas": "Data manipulation ready",
+                "numpy": "Numerical computation ready",
+                "matplotlib": "Visualization ready",
+            }
+            print(f"[OK] {package} ({module.__version__}) - {msg[package]}")
 
         except ImportError:
-            print(f"[MISSING] {package} - please install it")
-    if len(imported_modules) < len(required_packages):
-        print("\nPlease install missing dependencies using:")
-        print("pip install -r requirements.txt")
-        print("or")
-        print("poetry install")
-        sys.exit(1)
+            if package in required:
+                print(f"[MISSING] {package} - REQUIRED")
+            else:
+                print(f"[OPTIONAL] {package} not installed")
 
-    return imported_modules
+    for pkg in required:
+        if pkg not in modules:
+            print("\nInstall dependencies with:")
+            print("pip install -r requirements.txt")
+            print("or")
+            print("poetry install")
+            sys.exit(1)
+
+    return modules
 
 
 def main():
     modules = check_dependencies()
 
-    print("\nAnalyzing Matrix data...")
-    print("Processing 1000 data points...")
-
     pd = modules["pandas"]
     np = modules["numpy"]
     plt = importlib.import_module("matplotlib.pyplot")
+
+    print("\nAnalyzing Matrix data...")
+    print("Processing 1000 data points...")
 
     data = pd.DataFrame({"matrix_code": np.random.randn(1000)})
 
     print("Generating visualization...")
 
-    plt.plot(data["matrix_code"], color="blue")
-    plt.title("Random Data Plot")
-    plt.xlabel("Index")
-    plt.ylabel("Signal Strength")
-    plt.grid(True)
 
-
+    plt.plot(data["matrix_code"])
     plt.savefig("matrix_analysis.png")
     plt.close()
 

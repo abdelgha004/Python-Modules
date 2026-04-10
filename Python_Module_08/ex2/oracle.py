@@ -39,13 +39,12 @@ def display_config(config):
 
     if config["mode"] == "development":
         print("Database: Connected to local instance")
-        print("Log Level: DEBUG")
     else:
         print("Database: Connected to production server")
-        print("Log Level: INFO")
 
     print("API Access: Authenticated")
-    print(f"Zion Network: Online ({config['zion']})")
+    print(f"Log Level: {config['log']}")
+    print("Zion Network: Online")
 
 
 def security_check(config):
