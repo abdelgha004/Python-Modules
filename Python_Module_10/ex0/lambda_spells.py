@@ -30,7 +30,7 @@ def main():
 
     spells = ["fireball", "heal", "shield"]
 
-    print("\ntesting artifact sorter...")
+    print("\nTesting artifact sorter...")
     sorted_artifacts = artifact_sorter(artifacts)
     print(
         f"{sorted_artifacts[0]['name']} "
@@ -38,7 +38,7 @@ def main():
         f"{sorted_artifacts[1]['name']} "
         f"({sorted_artifacts[1]['power']} power)")
 
-    print("\ntesting spell transformer...")
+    print("\nTesting spell transformer...")
     transformed_spells = spell_transformer(spells)
     print(" ".join(transformed_spells))
 
