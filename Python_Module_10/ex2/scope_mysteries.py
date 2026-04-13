@@ -1,14 +1,10 @@
-
-initial_powers = [20, 47, 79]
-power_additions = [16, 5, 12, 9, 7]
-enchantment_types = ['Earthen', 'Flaming', 'Flowing']
-items_to_enchant = ['Amulet', 'Sword', 'Wand', 'Staff']
+from typing import Callable
 
 
-def mage_counter() -> callable:
+def mage_counter() -> Callable:
     count = 0
 
-    def counter():
+    def counter() -> int:
         nonlocal count
         count += 1
         return count
@@ -16,32 +12,32 @@ def mage_counter() -> callable:
     return counter
 
 
-def spell_accumulator(initial_power: int) -> callable:
-    power = initial_power
+def spell_accumulator(initial_power: int) -> Callable:
+    total_power = initial_power
 
-    def add_power(total):
-        nonlocal power
-        power += total
-        return power
+    def add_power(amount: int) -> int:
+        nonlocal total_power
+        total_power += amount
+        return total_power
+
     return add_power
 
 
-def enchantment_factory(enchantment_type: str) -> callable:
-    def enchant(item):
-        return f"{enchantment_type} {item}"
+def enchantment_factory(enchantment_type: str) -> Callable:
+    def enchant(item_name: str) -> str:
+        return f"{enchantment_type} {item_name}"
+
     return enchant
 
 
-def memory_vault() -> dict[str, callable]:
-    memory = {}
+def memory_vault() -> dict[str, Callable]:
+    storage: dict[str, object] = {}
 
-    def store(key, value):
-        memory[key] = value
+    def store(key: str, value: object) -> None:
+        storage[key] = value
 
-    def recall(key):
-        if key in memory:
-            return memory[key]
-        return "Memory not found"
+    def recall(key: str) -> object | str:
+        return storage.get(key, "Memory not found")
 
     return {
         "store": store,
@@ -49,86 +45,40 @@ def memory_vault() -> dict[str, callable]:
     }
 
 
-def main():
+def main() -> None:
     print("Testing mage counter...")
-    c = mage_counter()
-    for i in range(1, 3 + 1):
-        print(f"Call {i}:", c())
+
+    counter_a = mage_counter()
+    print(f"counter_a call 1: {counter_a()}")
+    print(f"counter_a call 2: {counter_a()}")
+
+    counter_b = mage_counter()
+    print(f"counter_b call 1: {counter_b()}")
 
     print("\nTesting spell accumulator...")
-    p = spell_accumulator(initial_powers[0])
-    print(f"Initial power {initial_powers[0]}: accumulated power {p(10)}")
 
-    print("\nTesting enchantant factory...")
-    e = enchantment_factory(enchantment_types[1])
-    for i in items_to_enchant:
-        print(e(i))
+    accumulator = spell_accumulator(100)
+    print(f"Base 100, add 20: {accumulator(20)}")
+    print(f"Base 100, add 30: {accumulator(30)}")
+
+    print("\nTesting enchantment factory...")
+
+    flaming = enchantment_factory("Flaming")
+    frozen = enchantment_factory("Frozen")
+
+    print(flaming("Sword"))
+    print(frozen("Shield"))
 
     print("\nTesting memory vault...")
-    function_dict = memory_vault()
-    function_dict["store"]("color", "blue")
-    print(function_dict["recall"]("color"))
+
+    vault = memory_vault()
+
+    vault["store"]("secret", 42)
+    print("Store 'secret' = 42")
+
+    print(f"Recall 'secret': {vault['recall']('secret')}")
+    print(f"Recall 'unknown': {vault['recall']('unknown')}")
 
 
 if __name__ == "__main__":
     main()
-
-
-
-# def mage_counter() -> callable:
-#     x: int = 0
-
-#     def count_mages() -> int:
-#         nonlocal x
-#         x += 1
-#         return x
-#     return count_mages
-
-
-# def spell_accumulator(initial_power: int) -> callable:
-#     x: int = initial_power
-
-#     def add_number(power_to_add):
-#         nonlocal x
-#         x += power_to_add
-#         return x
-#     return add_number
-
-
-# def enchantment_factory(enchantment_type: str) -> callable:
-#     def fun(type_name):
-#         return f"{enchantment_type} {type_name}"
-
-#     return fun
-
-
-# def memory_vault() -> dict[str, callable]:
-#     def store(key, value):
-#         dict[key] = value
-
-#     def recall(key):
-#         try:
-#             return dict[key]
-#         except KeyError:
-#             return "Memory not found"
-
-#     return {
-#         'store': store,
-#         'recall': recall
-#         }
-
-
-# def main():
-#     print("\nTesting mage counter...")
-#     x = mage_counter()
-#     print(f"Call 1: {x()}")
-#     print(f"Call 2: {x()}")
-#     print(f"Call 3: {x()}")
-
-#     print("\nTesting enchantment factory...")
-#     print(enchantment_factory("Flaming")("Sword"))
-#     print(enchantment_factory("Frozen")("Shield"))
-
-
-# if __name__ == "__main__":
-#     main()
